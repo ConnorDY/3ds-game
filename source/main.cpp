@@ -51,9 +51,7 @@ int main(int argc, char* argv[])
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.0f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 
-		/* Begin frame */
 		level->draw();
-		/* End frame */
 
 		C3D_FrameEnd(0);
 	}

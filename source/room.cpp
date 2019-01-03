@@ -1,5 +1,7 @@
 #include "room.h"
 
+#include "globals.h"
+
 Room::Room()
 {
 	// Load sprite sheets
@@ -18,8 +20,8 @@ Room::Room()
 	bg = new Sprite(&spriteSheets["map1bg"], 0);
 	fg = new Sprite(&spriteSheets["map1fg"], 0);
 
-	bg->setPos(-416.f, -300.f);
-	fg->setPos(-416.f, -300.f);
+	bg->setPos(-viewX, -viewY);
+	fg->setPos(-viewX, -viewY);
 }
 
 Room::~Room()
@@ -56,10 +58,32 @@ void Room::handleInput(u32 kDown, u32 kHeld, u32 kUp)
 
 	if (kHeld & KEY_DLEFT || kHeld & KEY_CPAD_LEFT)
 		plyr->moveLeft();
+
+	if (kHeld & KEY_DDOWN || kHeld & KEY_CPAD_DOWN)
+		plyr->moveDown();
+
+	if (kHeld & KEY_DUP || kHeld & KEY_CPAD_UP)
+		plyr->moveUp();
 }
 
 void Room::draw()
 {
+	// Update view
+	viewX = plyr->getX() - (SCREEN_WIDTH / 2);
+	viewY = plyr->getY() - (SCREEN_HEIGHT / 2);
+
+	if (viewX > 832 - SCREEN_WIDTH) viewX = 832 - SCREEN_WIDTH;
+	else if (viewX < 0) viewX = 0;
+
+	if (viewY > 600 - SCREEN_HEIGHT) viewY = 600 - SCREEN_HEIGHT;
+	else if (viewY < 0) viewY = 0;
+
+	// Move objects relative to the view
+	plyr->setOffset(viewX, viewY);
+	bg->setPos(-viewX, -viewY);
+	fg->setPos(-viewX, -viewY);
+
+	// Draw
 	C2D_DrawSprite(bg->getSpr());
 	plyr->draw();
 	C2D_DrawSprite(fg->getSpr());

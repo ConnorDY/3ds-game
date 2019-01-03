@@ -15,13 +15,14 @@ class Room
 		Player* plyr = nullptr;
 		Sprite* bg = nullptr;
 		Sprite* fg = nullptr;
+		float viewX = 0.f, viewY = 0.f;
 	public:
 		Room();
 		~Room();
 
 		Player* getPlayer();
 
-		void handleInput(u32 kDown, u32 kHeld, u32 kup);
+		void handleInput(u32 kDown, u32 kHeld, u32 kUp);
 		void draw();
 };
 

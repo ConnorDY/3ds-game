@@ -17,19 +17,34 @@ Player::~Player()
 }
 
 /* Accessors */
+float Player::getX()
+{
+	return x;
+}
+
+float Player::getY()
+{
+	return y;
+}
+
 unsigned int Player::getSkin()
 {
 	return skin;
 }
 
 /* Setters */
-void Player::setPos(float xx, float yy)
+void Player::setPos(float xx, float yy, float offsetX = 0, float offsetY = 0)
 {
 	x = xx;
 	y = yy;
 
 	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
-		(*it)->setPos(x, y);
+		(*it)->setPos(x - offsetX, y - offsetY);
+}
+
+void Player::setOffset(float offsetX, float offsetY)
+{
+	setPos(x, y, offsetX, offsetY);
 }
 
 void Player::setScale(float xs, float ys)
@@ -74,6 +89,16 @@ void Player::moveLeft()
 {
 	setPos(x - 2, y);
 	setScale(-1.f, 1.f);
+}
+
+void Player::moveDown()
+{
+	setPos(x, y + 2);
+}
+
+void Player::moveUp()
+{
+	setPos(x, y - 2);
 }
 
 void Player::draw()
