@@ -15,6 +15,11 @@ Block::Block(float xx, float yy, float ww, float hh, unsigned int id)
 	C2D_TextOptimize(&txt);
 }
 
+Rect* Block::getRect()
+{
+	return new Rect(x, y, w, h);
+}
+
 void Block::draw(float xOffset, float yOffset)
 {
 	#ifdef DEBUG_MODE

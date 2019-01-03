@@ -24,6 +24,7 @@ class Room
 		~Room();
 
 		Player* getPlayer();
+		std::vector<Block*> getBlocks();
 
 		void handleInput(u32 kDown, u32 kHeld, u32 kUp);
 		void draw();

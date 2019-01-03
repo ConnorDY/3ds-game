@@ -16,7 +16,7 @@ Room::Room()
 	spriteSheets["map1fg"] = mapSheetFG;
 
 	// Initialize sprites
-	plyr = new Player(&spriteSheets["player"], 0);
+	plyr = new Player(&spriteSheets["player"], 0, this);
 	bg = new Sprite(&spriteSheets["map1bg"], 0);
 	fg = new Sprite(&spriteSheets["map1fg"], 0);
 
@@ -73,6 +73,11 @@ Room::~Room()
 Player* Room::getPlayer()
 {
 	return plyr;
+}
+
+std::vector<Block*> Room::getBlocks()
+{
+	return blocks;
 }
 
 /* Other Functions */

@@ -1,11 +1,14 @@
 #include "player.h"
 
 #include <math.h>
+#include <algorithm>
+#include "room.h"
 
-Player::Player(C2D_SpriteSheet* sS, unsigned int s)
+Player::Player(C2D_SpriteSheet* sS, unsigned int s, Room* r)
 {
 	spriteSheet = sS;
 	skin = s;
+	level = r;
 
 	setSkin(s);
 }
@@ -78,26 +81,62 @@ void Player::setSkin(unsigned int s)
 	}
 }
 
+std::vector<Block*> Player::allCollisions(float xx, float yy) const
+{
+	std::vector<Block*> result;
+	Rect* myRect = new Rect(x - 4, y - 10, x + 4, y + 24);
+	Rect* tempRect = new Rect(xx + myRect->getX() - x,
+							  yy + myRect->getY() - y,
+							  myRect->getW(),
+							  myRect->getH());
+
+	auto const &blocks = level->getBlocks();
+	std::copy_if(blocks.begin(), blocks.end(), std::back_inserter(result), [&](Block* const &elem)
+	{
+		return tempRect->intersects(elem->getRect());
+	});
+
+	delete myRect;
+	delete tempRect;
+
+	return result;
+}
+
+bool Player::placeFree(float xx, float yy) const
+{
+	Rect* tempRect = new Rect(xx - 4, yy - 10, 8, 24);
+
+	auto const &blocks = level->getBlocks();
+	return std::none_of(blocks.begin(), blocks.end(), [&](Block* const &elem)
+	{
+		return tempRect->intersects(elem->getRect());
+	});
+}
+
 /* Other Functions */
 void Player::moveRight()
 {
+	if (!placeFree(x + 2, y)) return;
 	setPos(x + 2, y);
 	setScale(1.f, 1.f);
 }
 
 void Player::moveLeft()
 {
+	if (!placeFree(x - 2, y)) return;
 	setPos(x - 2, y);
 	setScale(-1.f, 1.f);
 }
 
 void Player::moveDown()
 {
+	if (!placeFree(x, y + 2)) return;
 	setPos(x, y + 2);
 }
 
 void Player::moveUp()
 {
+	if (!placeFree(x, y - 2)) return;
 	setPos(x, y - 2);
 }
 
@@ -115,9 +154,19 @@ void Player::loopAroundMap()
 	if (x != xPrev || y != yPrev) setPos(x, y);
 }
 
+void Player::pushOutOfSolids()
+{
+	for (auto b : allCollisions(x, y))
+	{
+		auto bBox = b->getRect();
+		setPos(x, floor(std::min<float>(y, bBox->getY() - 14)));
+	}
+}
+
 void Player::draw()
 {
 	loopAroundMap();
+	//pushOutOfSolids();
 
 	frameTimer += 4.f / 60.f;
 	frameTimer = fmodf(frameTimer, 4.f);

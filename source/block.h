@@ -2,6 +2,7 @@
 #define BLOCK_H
 
 #include <citro2d.h>
+#include "rect.h"
 
 class Block
 {
@@ -12,6 +13,7 @@ class Block
 	public:
 		Block(float xx, float yy, float ww, float hh, unsigned int id);
 
+		Rect* getRect();
 		void draw(float xOffset, float yOffset);
 };
 

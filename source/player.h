@@ -5,6 +5,9 @@
 #include <citro2d.h>
 #include "globals.h"
 #include "sprite.h"
+#include "block.h"
+
+class Room;
 
 class Player
 {
@@ -14,26 +17,33 @@ class Player
 		unsigned int skin;
 		float frameTimer = 0,
 			  x = SCREEN_WIDTH / 2.f,
-			  y = SCREEN_HEIGHT / 2.f,
+			  y = (SCREEN_HEIGHT / 2.f) + 32,
 			  xScale = 1.f, yScale = 1.f;
 		C2D_SpriteSheet* spriteSheet;
+		Room* level;
 	public:
-		Player(C2D_SpriteSheet* sS, unsigned int skin);
+		Player(C2D_SpriteSheet* sS, unsigned int skin, Room* r);
 		~Player();
 
 		float getX();
 		float getY();
 		unsigned int getSkin();
+		std::vector<Block*> allCollisions(float xx, float yy) const;
+		bool placeFree(float xx, float yy) const;
 
 		void setPos(float xx, float yy, float offsetX, float offsetY);
 		void setOffset(float offsetX, float offsetY);
 		void setScale(float xs, float ys);
 		void setSkin(unsigned int s);
+
 		void moveRight();
 		void moveLeft();
 		void moveDown();
 		void moveUp();
+
 		void loopAroundMap();
+		void pushOutOfSolids();
+
 		void draw();
 };
 
