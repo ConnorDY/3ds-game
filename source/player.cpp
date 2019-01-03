@@ -4,9 +4,6 @@
 
 Player::Player(C2D_SpriteSheet* sS, unsigned int s)
 {
-	x = SCREEN_WIDTH / 2.f;
-	y = SCREEN_HEIGHT / 2.f;
-
 	spriteSheet = sS;
 	skin = s;
 
@@ -31,13 +28,22 @@ void Player::setPos(float xx, float yy)
 	x = xx;
 	y = yy;
 
-	for (unsigned int i = 0; i < 4; i++)
-		sprites[i]->setPos(x, y);
+	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
+		(*it)->setPos(x, y);
+}
+
+void Player::setScale(float xs, float ys)
+{
+	xScale = xs;
+	yScale = ys;
+	
+	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
+		(*it)->setScale(xScale, yScale);
 }
 
 void Player::setSkin(unsigned int s)
 {
-	if (s >= 4) return;
+	if (s >= 16) return;
 	skin = s;
 	
 	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
@@ -51,6 +57,7 @@ void Player::setSkin(unsigned int s)
 		Sprite* spr = new Sprite(spriteSheet, offset + i);
 		spr->setPos(x, y);
 		spr->setCenter(.5f, .5f);
+		spr->setScale(xScale, yScale);
 
 		sprites.push_back(spr);
 	}
@@ -59,11 +66,13 @@ void Player::setSkin(unsigned int s)
 void Player::moveRight()
 {
 	setPos(x + 2, y);
+	setScale(1.f, 1.f);
 }
 
 void Player::moveLeft()
 {
 	setPos(x - 2, y);
+	setScale(-1.f, 1.f);
 }
 
 void Player::draw()

@@ -26,9 +26,16 @@ void Sprite::setRot(float r)
 	C2D_SpriteSetRotation(spr, rot);
 }
 
-void Sprite::setCenter(float xx, float yy)
+void Sprite::setScale(float xs, float ys)
 {
-	cx = xx;
-	cy = yy;
-	C2D_SpriteSetCenter(spr, cx, cy);
+	xScale = xs;
+	yScale = ys;
+	C2D_SpriteSetScale(spr, xScale, yScale);
+}
+
+void Sprite::setCenter(float cx, float cy)
+{
+	centerX = cx;
+	centerY = cy;
+	C2D_SpriteSetCenter(spr, centerX, centerY);
 }
