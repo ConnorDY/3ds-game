@@ -20,19 +20,64 @@ Player::~Player()
 }
 
 /* Accessors */
-float Player::getX()
+float Player::getX() const
 {
 	return x;
 }
 
-float Player::getY()
+float Player::getY() const
 {
 	return y;
 }
 
-unsigned int Player::getSkin()
+unsigned int Player::getSkin() const
 {
 	return skin;
+}
+
+Rect Player::getRect() const
+{
+	return Rect(x - 4, y - 10, 8, 24);
+}
+
+Rect Player::getRectAt(float xx, float yy) const
+{
+	return Rect(xx - 4, yy - 10, 8, 24);
+}
+
+std::vector<Block*> Player::allCollisions(float xx, float yy) const
+{
+	std::vector<Block*> result;
+	Rect myRect = getRect();
+	Rect tempRect = Rect(xx + myRect.getX() - x,
+							  yy + myRect.getY() - y,
+							  myRect.getW(),
+							  myRect.getH());
+
+	auto const &blocks = level->getBlocks();
+	std::copy_if(blocks.begin(), blocks.end(), std::back_inserter(result), [&](Block* const &elem)
+	{
+		Rect* r = elem->getRect();
+		bool result = tempRect.intersects(r);
+		delete r;
+		return result;
+	});
+
+	return result;
+}
+
+bool Player::placeFree(float xx, float yy) const
+{
+	Rect tempRect = getRectAt(xx, yy);
+
+	auto const &blocks = level->getBlocks();
+	return std::none_of(blocks.begin(), blocks.end(), [&](Block* const &elem)
+	{
+		Rect* r = elem->getRect();
+		bool result = tempRect.intersects(r);
+		delete r;
+		return result;
+	});
 }
 
 /* Setters */
@@ -79,38 +124,6 @@ void Player::setSkin(unsigned int s)
 
 		sprites.push_back(spr);
 	}
-}
-
-std::vector<Block*> Player::allCollisions(float xx, float yy) const
-{
-	std::vector<Block*> result;
-	Rect* myRect = new Rect(x - 4, y - 10, 8, 24);
-	Rect* tempRect = new Rect(xx + myRect->getX() - x,
-							  yy + myRect->getY() - y,
-							  myRect->getW(),
-							  myRect->getH());
-
-	auto const &blocks = level->getBlocks();
-	std::copy_if(blocks.begin(), blocks.end(), std::back_inserter(result), [&](Block* const &elem)
-	{
-		return tempRect->intersects(elem->getRect());
-	});
-
-	delete myRect;
-	delete tempRect;
-
-	return result;
-}
-
-bool Player::placeFree(float xx, float yy) const
-{
-	Rect* tempRect = new Rect(xx - 4, yy - 10, 8, 24);
-
-	auto const &blocks = level->getBlocks();
-	return std::none_of(blocks.begin(), blocks.end(), [&](Block* const &elem)
-	{
-		return tempRect->intersects(elem->getRect());
-	});
 }
 
 /* Other Functions */

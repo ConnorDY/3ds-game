@@ -28,9 +28,11 @@ class Player
 		Player(C2D_SpriteSheet* sS, unsigned int skin, Room* r);
 		~Player();
 
-		float getX();
-		float getY();
-		unsigned int getSkin();
+		float getX() const;
+		float getY() const;
+		unsigned int getSkin() const;
+		Rect getRect() const;
+		Rect getRectAt(float xx, float yy) const;
 		std::vector<Block*> allCollisions(float xx, float yy) const;
 		bool placeFree(float xx, float yy) const;
 

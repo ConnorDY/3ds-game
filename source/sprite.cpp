@@ -12,7 +12,7 @@ Sprite::~Sprite()
 }
 
 /* Accessors */
-C2D_Sprite* Sprite::getSpr()
+C2D_Sprite* Sprite::getSpr() const
 {
 	return spr;
 }

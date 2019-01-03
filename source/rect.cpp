@@ -8,27 +8,27 @@ Rect::Rect(float xx, float yy, float ww, float hh)
 	h = hh;
 }
 
-float Rect::getX()
+float Rect::getX() const
 {
 	return x;
 }
 
-float Rect::getY()
+float Rect::getY() const
 {
 	return y;
 }
 
-float Rect::getW()
+float Rect::getW() const
 {
 	return w;
 }
 
-float Rect::getH()
+float Rect::getH() const
 {
 	return h;
 }
 
-bool Rect::intersects(Rect* r)
+bool Rect::intersects(Rect* r) const
 {
 	float right = x + w;
 	float bottom = y + h;

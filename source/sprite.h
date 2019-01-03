@@ -15,7 +15,7 @@ class Sprite
 		Sprite(C2D_SpriteSheet* spriteSheet, unsigned int num);
 		~Sprite();
 
-		C2D_Sprite* getSpr();
+		C2D_Sprite* getSpr() const;
 
 		void setPos(float xx, float yy);
 		void setRot(float r);

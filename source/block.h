@@ -13,7 +13,7 @@ class Block
 	public:
 		Block(float xx, float yy, float ww, float hh, unsigned int id);
 
-		Rect* getRect();
+		Rect* getRect() const;
 		void draw(float xOffset, float yOffset);
 };
 
