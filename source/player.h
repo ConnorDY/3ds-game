@@ -33,6 +33,7 @@ class Player
 		void moveLeft();
 		void moveDown();
 		void moveUp();
+		void loopAroundMap();
 		void draw();
 };
 

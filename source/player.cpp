@@ -101,8 +101,24 @@ void Player::moveUp()
 	setPos(x, y - 2);
 }
 
+void Player::loopAroundMap()
+{
+	float xPrev = x;
+	float yPrev = y;
+
+	if (x < -1) x += ROOM_WIDTH;
+	else if (x > ROOM_WIDTH + 1) x -= ROOM_WIDTH;
+
+	if (y < -1) y += ROOM_HEIGHT;
+	else if (y > ROOM_HEIGHT + 1) y -= ROOM_HEIGHT;
+
+	if (x != xPrev || y != yPrev) setPos(x, y);
+}
+
 void Player::draw()
 {
+	loopAroundMap();
+
 	frameTimer += 4.f / 60.f;
 	frameTimer = fmodf(frameTimer, 4.f);
 

@@ -3,6 +3,10 @@
 
 #define SCREEN_WIDTH  400
 #define SCREEN_HEIGHT 240
-#define DEBUG_MODE
+
+#define ROOM_WIDTH 832
+#define ROOM_HEIGHT 600
+
+//#define DEBUG_MODE
 
 #endif

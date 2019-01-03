@@ -6,11 +6,9 @@
 #include <vector>
 #include <map>
 
+#include "globals.h"
 #include "player.h"
 #include "block.h"
-
-#define ROOM_WIDTH 832
-#define ROOM_HEIGHT 600
 
 class Room
 {

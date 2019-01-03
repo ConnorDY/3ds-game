@@ -1,7 +1,6 @@
 #include "room.h"
 
 #include <3ds.h>
-#include "globals.h"
 
 Room::Room()
 {
