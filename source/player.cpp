@@ -84,7 +84,7 @@ void Player::setSkin(unsigned int s)
 std::vector<Block*> Player::allCollisions(float xx, float yy) const
 {
 	std::vector<Block*> result;
-	Rect* myRect = new Rect(x - 4, y - 10, x + 4, y + 24);
+	Rect* myRect = new Rect(x - 4, y - 10, 8, 24);
 	Rect* tempRect = new Rect(xx + myRect->getX() - x,
 							  yy + myRect->getY() - y,
 							  myRect->getW(),
@@ -159,14 +159,14 @@ void Player::pushOutOfSolids()
 	for (auto b : allCollisions(x, y))
 	{
 		auto bBox = b->getRect();
-		setPos(x, floor(std::min<float>(y, bBox->getY() - 14)));
+		setPos(x, floor(std::min<float>(y, bBox->getY() - 10)));
 	}
 }
 
 void Player::draw()
 {
 	loopAroundMap();
-	//pushOutOfSolids();
+	pushOutOfSolids();
 
 	frameTimer += 4.f / 60.f;
 	frameTimer = fmodf(frameTimer, 4.f);
