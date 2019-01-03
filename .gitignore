@@ -1,0 +1,8 @@
+# directories
+build/
+romfs/
+
+# filetypes
+*.3dsx
+*.elf
+*.smdh

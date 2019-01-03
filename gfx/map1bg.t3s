@@ -1,0 +1,2 @@
+--atlas -f rgb888 -z auto
+map/bg.png
