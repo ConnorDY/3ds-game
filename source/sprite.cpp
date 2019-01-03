@@ -37,5 +37,5 @@ void Sprite::setCenter(float cx, float cy)
 {
 	centerX = cx;
 	centerY = cy;
-	C2D_SpriteSetCenter(spr, centerX, centerY);
+	C2D_SpriteSetCenterRaw(spr, centerX, centerY);
 }

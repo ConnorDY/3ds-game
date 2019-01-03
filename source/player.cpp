@@ -36,7 +36,7 @@ void Player::setScale(float xs, float ys)
 {
 	xScale = xs;
 	yScale = ys;
-	
+
 	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
 		(*it)->setScale(xScale, yScale);
 }
@@ -56,7 +56,7 @@ void Player::setSkin(unsigned int s)
 	{
 		Sprite* spr = new Sprite(spriteSheet, offset + i);
 		spr->setPos(x, y);
-		spr->setCenter(.5f, .5f);
+		spr->setCenter(16.f, 16.f);
 		spr->setScale(xScale, yScale);
 
 		sprites.push_back(spr);
