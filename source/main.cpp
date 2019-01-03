@@ -45,9 +45,23 @@ int main(int argc, char* argv[])
 
 		// Respond to user input
 		u32 kDown = hidKeysDown();
+		u32 kHeld = hidKeysHeld();
+		u32 kUp = hidKeysUp();
+
 		if (kDown & KEY_START)
 			break; // break in order to return to hbmenu
 
+		if (kHeld & KEY_DRIGHT || kHeld & KEY_CPAD_RIGHT)
+		{
+			plyr->moveRight();
+		}
+
+		if (kHeld & KEY_DLEFT || kHeld & KEY_CPAD_LEFT)
+		{
+			plyr->moveLeft();
+		}
+
+		// Render console on bottom screen
 		printf("\x1b[1;1HCPU:     %6.2f%%\x1b[K", C3D_GetProcessingTime()*6.0f);
 		printf("\x1b[2;1HGPU:     %6.2f%%\x1b[K", C3D_GetDrawingTime()*6.0f);
 		printf("\x1b[3;1HCmdBuf:  %6.2f%%\x1b[K", C3D_GetCmdBufUsage()*100.0f);
