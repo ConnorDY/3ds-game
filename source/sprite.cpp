@@ -6,6 +6,11 @@ Sprite::Sprite(C2D_SpriteSheet* spriteSheet, unsigned int num)
 	C2D_SpriteFromSheet(spr, *spriteSheet, num);
 }
 
+Sprite::~Sprite()
+{
+	delete spr;
+}
+
 /* Accessors */
 C2D_Sprite* Sprite::getSpr()
 {

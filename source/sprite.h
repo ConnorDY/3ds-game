@@ -13,6 +13,8 @@ class Sprite
 			  rot = 0;
 	public:
 		Sprite(C2D_SpriteSheet* spriteSheet, unsigned int num);
+		~Sprite();
+
 		C2D_Sprite* getSpr();
 
 		void setPos(float xx, float yy);

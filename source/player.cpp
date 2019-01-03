@@ -63,6 +63,7 @@ void Player::setSkin(unsigned int s)
 	}
 }
 
+/* Other Functions */
 void Player::moveRight()
 {
 	setPos(x + 2, y);

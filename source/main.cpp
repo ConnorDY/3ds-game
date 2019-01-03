@@ -7,8 +7,7 @@
 #include <vector>
 
 #include "globals.h"
-#include "player.h"
-#include "sprite.h"
+#include "room.h"
 
 int main(int argc, char* argv[])
 {
@@ -23,20 +22,7 @@ int main(int argc, char* argv[])
 	// Create screens
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 
-	// Load graphics
-	C2D_SpriteSheet spriteSheet = C2D_SpriteSheetLoad("romfs:/gfx/sprites.t3x");
-	C2D_SpriteSheet mapSheetBG = C2D_SpriteSheetLoad("romfs:/gfx/map1bg.t3x");
-	C2D_SpriteSheet mapSheetFG = C2D_SpriteSheetLoad("romfs:/gfx/map1fg.t3x");
-
-	if (!spriteSheet || !mapSheetBG || !mapSheetFG) svcBreak(USERBREAK_PANIC);
-
-	// Initialize sprites
-	Player* plyr = new Player(&spriteSheet, 0);
-	Sprite* bg = new Sprite(&mapSheetBG, 0);
-	Sprite* fg = new Sprite(&mapSheetFG, 0);
-
-	bg->setPos(-416.f, -300.f);
-	fg->setPos(-416.f, -300.f);
+	Room* level = new Room();
 
 	// Main loop
 	while (aptMainLoop())
@@ -46,31 +32,19 @@ int main(int argc, char* argv[])
 		// Respond to user input
 		u32 kDown = hidKeysDown();
 		u32 kHeld = hidKeysHeld();
-		//u32 kUp = hidKeysUp();
+		u32 kUp = hidKeysUp();
 
 		// Return to HB menu
 		if (kDown & KEY_START)
 			break;
 
-		// Change skin
-		if (kDown & KEY_R)
-			plyr->setSkin(plyr->getSkin() + 1);
-
-		if (kDown & KEY_L)
-			plyr->setSkin(plyr->getSkin() - 1);
-
-		// Move left/right
-		if (kHeld & KEY_DRIGHT || kHeld & KEY_CPAD_RIGHT)
-			plyr->moveRight();
-
-		if (kHeld & KEY_DLEFT || kHeld & KEY_CPAD_LEFT)
-			plyr->moveLeft();
+		level->handleInput(kDown, kHeld, kUp);
 
 		// Render console on bottom screen
 		printf("\x1b[1;1HCPU:     %6.2f%%\x1b[K", C3D_GetProcessingTime()*6.0f);
 		printf("\x1b[2;1HGPU:     %6.2f%%\x1b[K", C3D_GetDrawingTime()*6.0f);
 		printf("\x1b[3;1HCmdBuf:  %6.2f%%\x1b[K", C3D_GetCmdBufUsage()*100.0f);
-		printf("\x1b[5;1HSkin:    %u\x1b[K", plyr->getSkin());
+		printf("\x1b[5;1HSkin:    %u\x1b[K", level->getPlayer()->getSkin());
 
 		// Render the scene
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -78,23 +52,14 @@ int main(int argc, char* argv[])
 		C2D_SceneBegin(top);
 
 		/* Begin frame */
-		C2D_DrawSprite(bg->getSpr());
-
-		plyr->draw();
-
-		C2D_DrawSprite(fg->getSpr());
+		level->draw();
 		/* End frame */
 
 		C3D_FrameEnd(0);
 	}
 
-	// Delete objects
-	delete bg;
-	delete fg;
-	delete plyr;
-
-	// Delete graphics
-	C2D_SpriteSheetFree(spriteSheet);
+	// Delete room
+	delete level;
 
 	// Deinit libs
 	C2D_Fini();
