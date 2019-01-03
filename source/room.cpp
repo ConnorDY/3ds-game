@@ -97,18 +97,15 @@ void Room::handleInput(u32 kDown, u32 kHeld, u32 kUp)
 	if (kHeld & KEY_DLEFT || kHeld & KEY_CPAD_LEFT)
 		plyr->moveLeft();
 
-	if (kHeld & KEY_DDOWN || kHeld & KEY_CPAD_DOWN)
-		plyr->moveDown();
-
-	if (kHeld & KEY_DUP || kHeld & KEY_CPAD_UP)
-		plyr->moveUp();
+	if (kDown & KEY_A)
+		plyr->jump();
 }
 
 void Room::draw()
 {
 	// Update view
-	viewX = plyr->getX() - (SCREEN_WIDTH / 2);
-	viewY = plyr->getY() - (SCREEN_HEIGHT / 2);
+	viewX = ceil(plyr->getX() - (SCREEN_WIDTH / 2));
+	viewY = ceil(plyr->getY() - (SCREEN_HEIGHT / 2));
 
 	if (viewX > ROOM_WIDTH - SCREEN_WIDTH) viewX = ROOM_WIDTH - SCREEN_WIDTH;
 	else if (viewX < 0) viewX = 0;

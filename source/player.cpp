@@ -42,7 +42,7 @@ void Player::setPos(float xx, float yy, float offsetX = 0, float offsetY = 0)
 	y = yy;
 
 	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
-		(*it)->setPos(x - offsetX, y - offsetY);
+		(*it)->setPos(ceil(x - offsetX), ceil(y - offsetY));
 }
 
 void Player::setOffset(float offsetX, float offsetY)
@@ -73,7 +73,7 @@ void Player::setSkin(unsigned int s)
 	for (unsigned int i = 0; i < 4; i++)
 	{
 		Sprite* spr = new Sprite(spriteSheet, offset + i);
-		spr->setPos(x, y);
+		spr->setPos(ceil(x), ceil(y));
 		spr->setCenter(16.f, 16.f);
 		spr->setScale(xScale, yScale);
 
@@ -128,16 +128,9 @@ void Player::moveLeft()
 	setScale(-1.f, 1.f);
 }
 
-void Player::moveDown()
+void Player::jump()
 {
-	if (!placeFree(x, y + 2)) return;
-	setPos(x, y + 2);
-}
-
-void Player::moveUp()
-{
-	if (!placeFree(x, y - 2)) return;
-	setPos(x, y - 2);
+	if (dy == 0) dy = -9.f;
 }
 
 void Player::loopAroundMap()
@@ -163,10 +156,63 @@ void Player::pushOutOfSolids()
 	}
 }
 
+void Player::applyGravityOnce()
+{
+	if (placeFree(x, y + 1)) dy += gravity;
+	else if (dy > 0.f) dy = 0.f;
+
+	if (dy > maxFallSpeed) dy = maxFallSpeed;
+}
+
+void Player::applyVelocityOnce()
+{
+	for (float i = fabs(dy); i > 0; i--)
+	{
+		float j = copysign(i, dy);
+		if (placeFree(x, y + j))
+		{
+			y += j;
+			break;
+		}
+	}
+
+	bool shouldSlopeWalk = false;//dy == 0 && !placeFree(x, y + 1);
+	for (float i = fabs(dx); i > 0; i--)
+	{
+		float xAdjust = copysign(i, dx);
+
+		// We search for a y-adjustment, these are our bounds
+		float yAdjustStart = 0;
+		float yAdjustEnd = 0;
+
+		if (shouldSlopeWalk)
+		{
+			yAdjustStart = round(maxFallSpeed);
+			yAdjustEnd = -4;
+		}
+
+		// Find an appropriate y-adjustment for slope walking
+		for (double yAdjust = yAdjustStart; yAdjust >= yAdjustEnd; yAdjust--)
+		{
+			if (placeFree(x + xAdjust, y + yAdjust))
+			{
+				x += xAdjust;
+				y += yAdjust;
+
+				return;
+			}
+		}
+	}
+}
+
 void Player::draw()
 {
+	applyGravityOnce();
+	applyVelocityOnce();
 	loopAroundMap();
 	pushOutOfSolids();
+
+	if (dy < 0.f && !placeFree(x, y - 1)) dy = 0.f;
 
 	if (x != xLast)
 	{

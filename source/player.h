@@ -19,7 +19,9 @@ class Player
 			  x = SCREEN_WIDTH / 2.f,
 			  y = (SCREEN_HEIGHT / 2.f) + 32,
 			  xLast = x, yLast = y,
-			  xScale = 1.f, yScale = 1.f;
+			  dx = 0.f, dy = 0.f,
+			  xScale = 1.f, yScale = 1.f,
+			  gravity = .5f, maxFallSpeed = 4.f;
 		C2D_SpriteSheet* spriteSheet;
 		Room* level;
 	public:
@@ -39,9 +41,10 @@ class Player
 
 		void moveRight();
 		void moveLeft();
-		void moveDown();
-		void moveUp();
+		void jump();
 
+		void applyGravityOnce();
+		void applyVelocityOnce();
 		void loopAroundMap();
 		void pushOutOfSolids();
 
