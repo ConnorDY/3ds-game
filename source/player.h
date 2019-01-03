@@ -18,6 +18,7 @@ class Player
 		float frameTimer = 0,
 			  x = SCREEN_WIDTH / 2.f,
 			  y = (SCREEN_HEIGHT / 2.f) + 32,
+			  xLast = x, yLast = y,
 			  xScale = 1.f, yScale = 1.f;
 		C2D_SpriteSheet* spriteSheet;
 		Room* level;

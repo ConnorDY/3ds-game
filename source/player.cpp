@@ -168,10 +168,17 @@ void Player::draw()
 	loopAroundMap();
 	pushOutOfSolids();
 
-	frameTimer += 4.f / 60.f;
-	frameTimer = fmodf(frameTimer, 4.f);
+	if (x != xLast)
+	{
+		frameTimer += 6.f / 60.f;
+		frameTimer = fmodf(frameTimer, 4.f);
+	}
+	else frameTimer = .8f;
 
 	unsigned int frame = anim[floor(frameTimer)];
 	Sprite* spr = sprites[frame];
 	C2D_DrawSprite(spr->getSpr());
+
+	xLast = x;
+	yLast = y;
 }
