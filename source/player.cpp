@@ -6,8 +6,10 @@ Player::Player(C2D_SpriteSheet* sS, unsigned int s)
 {
 	x = SCREEN_WIDTH / 2.f;
 	y = SCREEN_HEIGHT / 2.f;
-	skin = s;
+
 	spriteSheet = sS;
+	skin = s;
+
 	setSkin(s);
 }
 
@@ -17,6 +19,13 @@ Player::~Player()
 		delete sprites[i];
 }
 
+/* Accessors */
+unsigned int Player::getSkin()
+{
+	return skin;
+}
+
+/* Setters */
 void Player::setPos(float xx, float yy)
 {
 	x = xx;
@@ -28,15 +37,17 @@ void Player::setPos(float xx, float yy)
 
 void Player::setSkin(unsigned int s)
 {
+	if (s >= 4) return;
 	skin = s;
+	
+	for (std::vector<Sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
+		delete (*it);
+	sprites.clear();
 
-	for (unsigned int i = 0; i < sprites.size(); i++)
-		sprites.pop_back();
+	unsigned int offset = skin * 4;
 
 	for (unsigned int i = 0; i < 4; i++)
 	{
-		unsigned int offset = skin * 4;
-
 		Sprite* spr = new Sprite(spriteSheet, offset + i);
 		spr->setPos(x, y);
 		spr->setCenter(.5f, .5f);

@@ -18,6 +18,8 @@ class Player
 		Player(C2D_SpriteSheet* sS, unsigned int skin);
 		~Player();
 
+		unsigned int getSkin();
+
 		void setPos(float xx, float yy);
 		void setSkin(unsigned int s);
 		void moveRight();

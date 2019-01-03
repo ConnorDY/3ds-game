@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	if (!spriteSheet || !mapSheetBG || !mapSheetFG) svcBreak(USERBREAK_PANIC);
 
 	// Initialize sprites
-	Player* plyr = new Player(&spriteSheet, 1);
+	Player* plyr = new Player(&spriteSheet, 0);
 	Sprite* bg = new Sprite(&mapSheetBG, 0);
 	Sprite* fg = new Sprite(&mapSheetFG, 0);
 
@@ -46,25 +46,31 @@ int main(int argc, char* argv[])
 		// Respond to user input
 		u32 kDown = hidKeysDown();
 		u32 kHeld = hidKeysHeld();
-		u32 kUp = hidKeysUp();
+		//u32 kUp = hidKeysUp();
 
+		// Return to HB menu
 		if (kDown & KEY_START)
-			break; // break in order to return to hbmenu
+			break;
 
+		// Change skin
+		if (kDown & KEY_R)
+			plyr->setSkin(plyr->getSkin() + 1);
+
+		if (kDown & KEY_L)
+			plyr->setSkin(plyr->getSkin() - 1);
+
+		// Move left/right
 		if (kHeld & KEY_DRIGHT || kHeld & KEY_CPAD_RIGHT)
-		{
 			plyr->moveRight();
-		}
 
 		if (kHeld & KEY_DLEFT || kHeld & KEY_CPAD_LEFT)
-		{
 			plyr->moveLeft();
-		}
 
 		// Render console on bottom screen
 		printf("\x1b[1;1HCPU:     %6.2f%%\x1b[K", C3D_GetProcessingTime()*6.0f);
 		printf("\x1b[2;1HGPU:     %6.2f%%\x1b[K", C3D_GetDrawingTime()*6.0f);
 		printf("\x1b[3;1HCmdBuf:  %6.2f%%\x1b[K", C3D_GetCmdBufUsage()*100.0f);
+		printf("\x1b[5;1HSkin:    %u\x1b[K", plyr->getSkin());
 
 		// Render the scene
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
