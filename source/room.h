@@ -3,15 +3,20 @@
 
 #include <citro2d.h>
 #include <string>
+#include <vector>
 #include <map>
 
 #include "player.h"
-#include "sprite.h"
+#include "block.h"
+
+#define ROOM_WIDTH 832
+#define ROOM_HEIGHT 600
 
 class Room
 {
 	private:
 		std::map<std::string, C2D_SpriteSheet> spriteSheets;
+		std::vector<Block*> blocks;
 		Player* plyr = nullptr;
 		Sprite* bg = nullptr;
 		Sprite* fg = nullptr;

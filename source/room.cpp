@@ -1,5 +1,6 @@
 #include "room.h"
 
+#include <3ds.h>
 #include "globals.h"
 
 Room::Room()
@@ -22,6 +23,39 @@ Room::Room()
 
 	bg->setPos(-viewX, -viewY);
 	fg->setPos(-viewX, -viewY);
+
+	// Load blocks.txt
+	FILE* f = fopen("romfs:/blocks.txt", "r");
+	if (!f) svcBreak(USERBREAK_PANIC);
+
+	unsigned int id = 1;
+
+	char line[32];
+	std::string delimiter = ", ";
+
+	while (fgets(line, 32, f))
+	{
+		std::string str(line);
+		std::string token;
+		std::vector<int> values;
+		size_t pos = 0;
+
+		// Parse line
+		while ((pos = str.find(delimiter)) != std::string::npos)
+		{
+			token = str.substr(0, pos);
+			values.push_back(atoi(str.c_str()));
+			str.erase(0, pos + delimiter.length());
+		}
+		values.push_back(atoi(str.c_str()));
+
+		Block* b = new Block(values[0], values[1], values[2], values[3], id);
+		blocks.push_back(b);
+		id++;
+	}
+	if (!feof(f)) svcBreak(USERBREAK_PANIC);
+
+	fclose(f);
 }
 
 Room::~Room()
@@ -72,10 +106,10 @@ void Room::draw()
 	viewX = plyr->getX() - (SCREEN_WIDTH / 2);
 	viewY = plyr->getY() - (SCREEN_HEIGHT / 2);
 
-	if (viewX > 832 - SCREEN_WIDTH) viewX = 832 - SCREEN_WIDTH;
+	if (viewX > ROOM_WIDTH - SCREEN_WIDTH) viewX = ROOM_WIDTH - SCREEN_WIDTH;
 	else if (viewX < 0) viewX = 0;
 
-	if (viewY > 600 - SCREEN_HEIGHT) viewY = 600 - SCREEN_HEIGHT;
+	if (viewY > ROOM_HEIGHT - SCREEN_HEIGHT) viewY = ROOM_HEIGHT - SCREEN_HEIGHT;
 	else if (viewY < 0) viewY = 0;
 
 	// Move objects relative to the view
@@ -87,4 +121,7 @@ void Room::draw()
 	C2D_DrawSprite(bg->getSpr());
 	plyr->draw();
 	C2D_DrawSprite(fg->getSpr());
+
+	for (std::vector<Block*>::iterator it = blocks.begin(); it != blocks.end(); ++it)
+		(*it)->draw(viewX, viewY);
 }
