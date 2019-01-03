@@ -1,8 +1,8 @@
 #include "sprite.h"
 
-Sprite::Sprite(C2D_SpriteSheet spriteSheet, unsigned int num)
+Sprite::Sprite(C2D_SpriteSheet* spriteSheet, unsigned int num)
 {
-	C2D_SpriteFromSheet(&spr, spriteSheet, num);
+	C2D_SpriteFromSheet(&spr, *spriteSheet, num);
 }
 
 /* Accessors */

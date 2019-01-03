@@ -31,9 +31,9 @@ int main(int argc, char* argv[])
 	if (!spriteSheet || !mapSheetBG || !mapSheetFG) svcBreak(USERBREAK_PANIC);
 
 	// Initialize sprites
-	Player* plyr = new Player(spriteSheet, 0);
-	Sprite* bg = new Sprite(mapSheetBG, 0);
-	Sprite* fg = new Sprite(mapSheetFG, 0);
+	Player* plyr = new Player(&spriteSheet, 1);
+	Sprite* bg = new Sprite(&mapSheetBG, 0);
+	Sprite* fg = new Sprite(&mapSheetFG, 0);
 
 	bg->setPos(-416.f, -300.f);
 	fg->setPos(-416.f, -300.f);
